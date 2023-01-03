@@ -19,12 +19,18 @@
     background: #1d61c2;
     width: 60%;
     min-width: 250px;
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
 }
 
 .col{
     flex: 1;
+    overflow-y: scroll;
+}
+::-webkit-scrollbar{
+    width: 0;
+    background: transparent;
 }
 
 .msg-row{
