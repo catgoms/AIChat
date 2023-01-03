@@ -6,62 +6,110 @@
     <meta name="viewport" content="width=device-width, 
     initial-scale=1.0">
     <title>AI chat</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-    <style>
-        .line { margin-top: 10px; display: flex;}
-        .chat-box { background: #eee; padding: 5px; max-width: 250px;}
-        .mine { margin-left: auto; background: rgb(185, 190, 255);}
-        .input { width: auto; margin-bottom: 10px;}
-    </style>
-    <style>
         
-    </style>
-    <div class="chat-content">
-        <div class="line">
-            <span class="chat-box">Hello?</span>
-        </div>
-        <div class="line">
-            <span class="chat-box mine">Hello!</span>
+    <div class="container">
+        <div class="chatbox">
+            <div class="col">
+
+                <div class="msg-row">
+                    <span class="msg-text">Hello?</span>
+                </div>
+                <div class="msg-row msg-row2">
+                    <span class="msg-text">Hello!</span>
+                </div>
+                <!-- <div class="msg-row">
+                    <div class="msg-text">
+                        <h2>Steve</h2>
+                        <p>Hello?</p>
+                    </div>
+                </div>
+                <div class="msg-row msg-row2">
+                    <div class="msg-text">
+                        <h2>Amy</h2>
+                        <p>Hello!</p>
+                    </div>
+                </div> -->
+                
+            </div>
+            <div class="inputbox">
+                <input id="input" type="text" placeholder="Type your messages here...">
+                <button id="send">Send</button>
+            </div>
         </div>
     </div>
-    <input class="input" id="input">
-    <button class="button" id="send">Send</button>
 
     <script type="module">
         import { Configuration, OpenAIApi } from 'https://cdn.skypack.dev/openai';
 
         document.querySelector('#send').addEventListener('click', function(){
-            var template = `<div class="line">
-            <span class="chat-box mine">${document.querySelector('#input').value}</span>
+      var template = `<div class="line">
+        <span class="chat-box mine">${ document.querySelector('#input').value }</span>
+      </div>`
+      document.querySelector('.chat-content').insertAdjacentHTML('beforeend', template);
+
+      
+
+      const configuration = new Configuration({
+        apiKey: 'openai에서 발급받은 api key',
+      });
+      const openai = new OpenAIApi(configuration);
+
+      openai.createCompletion({
+        model: "text-davinci-002",
+        prompt: document.querySelector('#input').value,
+        temperature: 0.7,
+        max_tokens: 256,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+      }).then((result)=>{
+        console.log(result.data.choices[0].text)
+        var template = `<div class="line">
+          <span class="chat-box">${ result.data.choices[0].text }</span>
         </div>`
-        document.querySelector('.chat-content').insertAdjacentHTML('beforeend', 
-        template);
+        document.querySelector('.chat-content').insertAdjacentHTML('beforeend', template);
+      })
 
-        const configuration = new Configuration({
-            apiKey: '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',
-        });
-        const openai = new OpenAIApi(configuration);
+    })
 
-        openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: document.querySelector('#input').value,
-            temperature: 0.7,
-            max_tokens: 256,
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0,
-        }).then((result)=>{
-            console.log(result.data.choices[0].text)
-            var template = `<div class="line">
-                <span class="chat-box">${result.data.choices[0].text}</span>
-            </div>`
-            document.querySelector('.chat-content').insertAdjacentHTML('beforeend', 
-            template);
-        })
+        // document.addEventListener('keypress', function(event){
+        //     if (event.key === "Enter"){
+        //         var template = `<div class="msg-row msg-row2">
+        //             <span class="msg-text">${ document.querySelector('#input').value }</span>
+        //         </div>`
 
-        })
+        //         document.querySelector('.col').insertAdjacentHTML('beforeend', 
+        //         template);
+
+        //         const configuration = new Configuration({
+        //             apiKey: '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',
+        //         });
+        //         const openai = new OpenAIApi(configuration);
+
+        //         openai.createCompletion({
+        //             model: "text-davinci-003",
+        //             prompt: document.querySelector('#input').value,
+        //             temperature: 0.7,
+        //             max_tokens: 256,
+        //             top_p: 1,
+        //             frequency_penalty: 0,
+        //             presence_penalty: 0,
+        //         }).then((result)=>{
+        //             console.log(result.data.choices[0].text)
+        //             var template = `<div class="msg-row">
+        //                     <span class="msg-text">${ result.data.choices[0].text }</span>
+        //                 </div>`
+        //             document.querySelector('.col').insertAdjacentHTML('beforeend', 
+        //             template);
+        //         })
+        //     }
+        
+
+        // })
     </script>
 
 </body>
